@@ -19,16 +19,29 @@
     <ul v-else
         class="list-inline mb-0">
       <li class="list-inline-item">
-        <a class="btn btn-outline-light my-2"
-           href="#">你好 {{ user.name }}
-        </a>
+        <Dropdown>
+          <DropdownItem>
+            <a class="dropdown-item"
+               href="#">
+              新建文章
+            </a>
+          </DropdownItem>
+          <DropdownItem disabled>
+            <a class="dropdown-item"
+               href="#">
+              编辑资料
+            </a>
+          </DropdownItem>
+        </Dropdown>
       </li>
     </ul>
   </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, onMounted, onUnmounted } from 'vue'
+import Dropdown from '@/components/Dropdown.vue'
+import DropdownItem from '@/components/DropdownItem.vue'
 
 export interface UserProps {
   isLogin: boolean;
@@ -43,6 +56,10 @@ export default defineComponent({
       type: Object as PropType<UserProps>,
       required: true
     }
+  },
+  components: {
+    Dropdown,
+    DropdownItem
   }
 })
 </script>
