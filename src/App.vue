@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <my-component v-model="myVal"/>
+    <h2>{{myVal}}</h2>
+    <hr>
     <GlobalHeader :user="currentUser"/>
     <!--<ColumnList :list="list"/>-->
     <form>
@@ -7,7 +10,10 @@
         <label class="form-label"
                for="exampleInputEmail1">邮箱地址
         </label>
-        <ValidateInput :rules="emailRules"></ValidateInput>
+        <ValidateInput v-model="emailVal"
+                       :rules="emailRules"
+                       placeholder="haha" type="text"></ValidateInput>
+        {{ emailVal }}
       </div>
       <div class="mb-3">
         <label class="form-label"
@@ -17,7 +23,7 @@
                v-model="emailRef.val"
                aria-describedby="emailHelp"
                class="form-control"
-               @blur="validateEmali">
+               @blur="validateEmail">
         <div v-if="emailRef.error"
              id="emailHelp"
              class="form-text">
@@ -41,10 +47,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
+import MyComponent from '@/components/MyComponent.vue'
 
 const testData: ColumnProps[] = [
   {
@@ -83,15 +90,18 @@ export default defineComponent({
   components: {
     ColumnList,
     GlobalHeader,
-    ValidateInput
+    ValidateInput,
+    MyComponent
   },
   setup () {
+    const emailVal = ref<undefined | string>(undefined)
+    const myVal = ref('')
     const emailRef = reactive({
       val: '',
       error: false,
       message: ''
     })
-    const validateEmali = () => {
+    const validateEmail = () => {
       if (emailRef.val.trim() === '') {
         emailRef.error = true
         emailRef.message = '不该项能为空'
@@ -102,14 +112,18 @@ export default defineComponent({
     }
     const emailRules: RulesProp = [
       { type: 'required', message: '电子邮件不能为空' },
-      { type: 'email', message: '请输入正确的邮箱格式' }
+      { type: 'email', message: '请输入正确的邮箱格式' },
+      { type: 'min', message: '邮箱最少为3位数' },
+      { type: 'max', message: '邮箱最大为20位数' }
     ]
     return {
       list: testData,
       currentUser,
       emailRef,
-      validateEmali,
-      emailRules
+      validateEmail,
+      emailRules,
+      emailVal,
+      myVal
     }
   }
 })
