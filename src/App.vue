@@ -1,14 +1,50 @@
 <template>
   <div class="container">
     <GlobalHeader :user="currentUser"/>
-    <ColumnList :list="list"/>
+    <!--<ColumnList :list="list"/>-->
+    <form>
+      <div class="mb-3">
+        <label class="form-label"
+               for="exampleInputEmail1">邮箱地址
+        </label>
+        <ValidateInput :rules="emailRules"></ValidateInput>
+      </div>
+      <div class="mb-3">
+        <label class="form-label"
+               for="exampleInputEmail1">邮箱地址
+        </label>
+        <input id="exampleInputEmail1"
+               v-model="emailRef.val"
+               aria-describedby="emailHelp"
+               class="form-control"
+               @blur="validateEmali">
+        <div v-if="emailRef.error"
+             id="emailHelp"
+             class="form-text">
+          {{ emailRef.message }}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label"
+               for="exampleInputPassword1">
+          密码
+        </label>
+        <input id="exampleInputPassword1"
+               class="form-control"
+               type="password">
+      </div>
+      <button class="btn btn-primary"
+              type="submit">Submit
+      </button>
+    </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
+import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
 
 const testData: ColumnProps[] = [
   {
@@ -40,16 +76,40 @@ const currentUser: UserProps = {
   isLogin: true,
   name: 'lijj'
 }
+const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+
 export default defineComponent({
   name: 'App',
   components: {
     ColumnList,
-    GlobalHeader
+    GlobalHeader,
+    ValidateInput
   },
   setup () {
+    const emailRef = reactive({
+      val: '',
+      error: false,
+      message: ''
+    })
+    const validateEmali = () => {
+      if (emailRef.val.trim() === '') {
+        emailRef.error = true
+        emailRef.message = '不该项能为空'
+      } else if (!emailReg.test(emailRef.val)) {
+        emailRef.error = true
+        emailRef.message = '请输入一个有效的电子邮箱'
+      }
+    }
+    const emailRules: RulesProp = [
+      { type: 'required', message: '电子邮件不能为空' },
+      { type: 'email', message: '请输入正确的邮箱格式' }
+    ]
     return {
       list: testData,
-      currentUser
+      currentUser,
+      emailRef,
+      validateEmali,
+      emailRules
     }
   }
 })
