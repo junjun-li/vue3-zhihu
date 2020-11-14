@@ -1,57 +1,48 @@
 <template>
   <div class="container">
-    <my-component v-model="myVal"/>
-    <h2>{{myVal}}</h2>
-    <hr>
     <GlobalHeader :user="currentUser"/>
     <!--<ColumnList :list="list"/>-->
-    <form>
+    <ValidateForm @submitForm="submitForm">
       <div class="mb-3">
-        <label class="form-label"
-               for="exampleInputEmail1">邮箱地址
+        <label class="form-label">邮箱地址
         </label>
-        <ValidateInput v-model="emailVal"
-                       :rules="emailRules"
-                       placeholder="haha" type="text"></ValidateInput>
-        {{ emailVal }}
+        <ValidateInput
+          v-model="emailVal"
+          :rules="emailRules"
+          placeholder="请输入邮箱"
+          type="text"></ValidateInput>
       </div>
       <div class="mb-3">
-        <label class="form-label"
-               for="exampleInputEmail1">邮箱地址
-        </label>
-        <input id="exampleInputEmail1"
-               v-model="emailRef.val"
-               aria-describedby="emailHelp"
-               class="form-control"
-               @blur="validateEmail">
-        <div v-if="emailRef.error"
-             id="emailHelp"
-             class="form-text">
-          {{ emailRef.message }}
-        </div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label"
-               for="exampleInputPassword1">
+        <label class="form-label">
           密码
         </label>
-        <input id="exampleInputPassword1"
-               class="form-control"
-               type="password">
+        <ValidateInput
+          v-model="passwordVal"
+          :rules="passwordRules"
+          placeholder="请输入密码"
+          type="password"
+        />
       </div>
-      <button class="btn btn-primary"
-              type="submit">Submit
-      </button>
-    </form>
+      <template #submit>
+        <button
+          class="btn btn-primary"
+          type="submit">Submit
+        </button>
+      </template>
+    </ValidateForm>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import {
+  defineComponent,
+  reactive,
+  ref
+} from 'vue'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
-import MyComponent from '@/components/MyComponent.vue'
+import ValidateForm from '@/components/ValidateForm.vue'
 
 const testData: ColumnProps[] = [
   {
@@ -81,9 +72,8 @@ const testData: ColumnProps[] = [
 ]
 const currentUser: UserProps = {
   isLogin: true,
-  name: 'lijj'
+  name: 'ljj'
 }
-const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
 export default defineComponent({
   name: 'App',
@@ -91,39 +81,34 @@ export default defineComponent({
     ColumnList,
     GlobalHeader,
     ValidateInput,
-    MyComponent
+    ValidateForm
   },
   setup () {
     const emailVal = ref<undefined | string>(undefined)
-    const myVal = ref('')
-    const emailRef = reactive({
-      val: '',
-      error: false,
-      message: ''
-    })
-    const validateEmail = () => {
-      if (emailRef.val.trim() === '') {
-        emailRef.error = true
-        emailRef.message = '不该项能为空'
-      } else if (!emailReg.test(emailRef.val)) {
-        emailRef.error = true
-        emailRef.message = '请输入一个有效的电子邮箱'
-      }
-    }
+    const passwordVal = ref<undefined | string>(undefined)
+
     const emailRules: RulesProp = [
-      { type: 'required', message: '电子邮件不能为空' },
+      { required: true, message: '电子邮件不能为空' },
       { type: 'email', message: '请输入正确的邮箱格式' },
-      { type: 'min', message: '邮箱最少为3位数' },
-      { type: 'max', message: '邮箱最大为20位数' }
+      { min: 3, message: '邮箱最少为3位数' },
+      { max: 20, message: '邮箱最多为20位数' }
     ]
+    const passwordRules: RulesProp = [
+      { required: true, message: '请输入密码' },
+      { min: 6, message: '密码最少为6位数' },
+      { max: 20, message: '密码最多为20位数' }
+    ]
+    const submitForm = (result: boolean) => {
+      console.log(result)
+    }
     return {
       list: testData,
       currentUser,
-      emailRef,
-      validateEmail,
       emailRules,
       emailVal,
-      myVal
+      submitForm,
+      passwordVal,
+      passwordRules
     }
   }
 })
@@ -134,7 +119,6 @@ export default defineComponent({
    v2.0 | 20110126
    License: none (public domain)
 */
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -155,25 +139,31 @@ time, mark, audio, video {
   font: inherit;
   vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
 }
+
 body {
   line-height: 1;
 }
+
 ol, ul {
   list-style: none;
 }
+
 blockquote, q {
   quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
   content: '';
   content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;

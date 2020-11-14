@@ -1,24 +1,42 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input v-bind="$attrs"
-           :class="{'is-invalid': inputRef.error}"
-           :value="inputRef.val"
-           class="form-control"
-           @blur="validateEmail"
-           @input="updateValue">
-    <span v-if="inputRef.error"
-          class="invalid-feedback" v-bind="$attrs">{{ inputRef.message }}</span>
+    <input
+      v-bind="$attrs"
+      :class="{'is-invalid': inputRef.error}"
+      :value="inputRef.val"
+      class="form-control"
+      @blur="validateInput"
+      @input="updateValue">
+    <span
+      v-if="inputRef.error"
+      v-bind="$attrs"
+      class="invalid-feedback">{{ inputRef.message }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, reactive } from 'vue'
+import {
+  PropType,
+  defineComponent,
+  reactive,
+  onMounted
+} from 'vue'
+import { emitter } from '@/components/ValidateForm.vue'
 
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
 interface RuleProp {
-  type: 'required' | 'email' | 'max' | 'min';
-  message: string;
+  type?: 'email';
+  required?: boolean;
+  message?: string;
+  max?: string | number;
+  min?: string | number;
+}
+
+interface InputRef {
+  val: any;
+  error: boolean;
+  message: undefined | string;
 }
 
 export type RulesProp = RuleProp[]
@@ -33,7 +51,7 @@ export default defineComponent({
     modelValue: String
   },
   setup (props, context) {
-    const inputRef = reactive({
+    const inputRef: InputRef = reactive({
       val: props.modelValue || '',
       error: false,
       message: ''
@@ -44,29 +62,32 @@ export default defineComponent({
       // 2.
       context.emit('update:modelValue', targetValue)
     }
-    const validateEmail = () => {
+    const validateInput = () => {
       if (props.rules) {
         const allPassed = props.rules.every(ruleItem => {
           let passed = true
           inputRef.message = ruleItem.message
-          if (ruleItem.type === 'required') {
+          if (ruleItem.required) {
             passed = inputRef.val !== ''
           } else if (ruleItem.type === 'email') {
             passed = emailReg.test(inputRef.val)
-          } else if (ruleItem.type === 'min') {
-            passed = inputRef.val.length > 3
-          } else if (ruleItem.type === 'max') {
-            passed = inputRef.val.length < 20
+          } else if (ruleItem.min) {
+            passed = inputRef.val.length > +ruleItem.min
+          } else if (ruleItem.max) {
+            passed = inputRef.val.length < +ruleItem.max
           }
-
           return passed
         })
         inputRef.error = !allPassed
       }
     }
+
+    onMounted(() => {
+      emitter.emit('form-item-created', validateInput)
+    })
     return {
       inputRef,
-      validateEmail,
+      validateInput,
       updateValue
     }
   }
