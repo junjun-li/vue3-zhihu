@@ -32,7 +32,7 @@ export default defineComponent({
     const submitForm = () => {
       // 在这里循环调用 validateAllFunc 的方法
       // 并且使用 context.emit('submit-form', true) 把最后的结果返回出去
-      const result = validateAllFunc.map(func => func())
+      const result = validateAllFunc.map(func => func()).every(res => res)
       // .every(res => res)
       context.emit('submit-form', result)
     }

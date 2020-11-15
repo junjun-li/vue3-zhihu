@@ -1,25 +1,37 @@
 <template>
-  <div ref="dropdownRef"
-       class="dropdown">
-    <a class="btn btn-outline-light my-2 dropdown-toggle"
-       href="#"
-       @click.prevent="toggleOpen">
-      你好, junjun
+  <div
+    ref="dropdownRef"
+    class="dropdown">
+    <!--    <slot @click.prevent="toggleOpen" />-->
+    <a
+      class="btn btn-outline-light my-2 dropdown-toggle"
+      href="#"
+      @click.prevent="toggleOpen">
+      {{ title }}
     </a>
-    <ul v-if="isOpen"
-        :style="{display: 'block'}"
-        aria-labelledby="dropdownMenuButton"
-        class="dropdown-menu">
-      <slot/>
+    <ul
+      v-if="isOpen"
+      :style="{display: 'block'}"
+      aria-labelledby="dropdownMenuButton"
+      class="dropdown-menu">
+      <slot name="dropdown"></slot>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted, watch } from 'vue'
+import {
+  defineComponent,
+  ref,
+  watch
+} from 'vue'
 import useClickOutside from '@/hooks/useClickOutside'
+
 export default defineComponent({
   name: 'Dropdown',
+  props: {
+    title: String
+  },
   setup () {
     const isOpen = ref(false)
     const dropdownRef = ref<null | HTMLElement>(null)
@@ -57,7 +69,8 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss"
-       scoped>
+<style
+  lang="scss"
+  scoped>
 
 </style>

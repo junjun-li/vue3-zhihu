@@ -1,36 +1,9 @@
 <template>
   <div class="container">
     <GlobalHeader :user="currentUser"/>
-    <router-view />
+    <router-view/>
     <!--<ColumnList :list="list"/>-->
-    <!--    <ValidateForm @submitForm="submitForm">-->
-    <!--      <div class="mb-3">-->
-    <!--        <label class="form-label">邮箱地址-->
-    <!--        </label>-->
-    <!--        <ValidateInput-->
-    <!--          v-model="emailVal"-->
-    <!--          :rules="emailRules"-->
-    <!--          placeholder="请输入邮箱"-->
-    <!--          type="text"></ValidateInput>-->
-    <!--      </div>-->
-    <!--      <div class="mb-3">-->
-    <!--        <label class="form-label">-->
-    <!--          密码-->
-    <!--        </label>-->
-    <!--        <ValidateInput-->
-    <!--          v-model="passwordVal"-->
-    <!--          :rules="passwordRules"-->
-    <!--          placeholder="请输入密码"-->
-    <!--          type="password"-->
-    <!--        />-->
-    <!--      </div>-->
-    <!--      <template #submit>-->
-    <!--        <button-->
-    <!--          class="btn btn-primary"-->
-    <!--          type="submit">Submit-->
-    <!--        </button>-->
-    <!--      </template>-->
-    <!--    </ValidateForm>-->
+
     <footer class="text-center py-4 text-secondary bg-light mt-6">
       <small>
         <ul class="list-inline mb-0">
@@ -53,8 +26,6 @@ import {
 } from 'vue'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
-import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
-import ValidateForm from '@/components/ValidateForm.vue'
 
 const testData: ColumnProps[] = [
   {
@@ -91,36 +62,17 @@ export default defineComponent({
   name: 'App',
   components: {
     ColumnList,
-    GlobalHeader,
-    ValidateInput,
-    ValidateForm
+    GlobalHeader
   },
   setup () {
     const emailVal = ref<undefined | string>(undefined)
     const passwordVal = ref<undefined | string>(undefined)
 
-    const emailRules: RulesProp = [
-      { required: true, message: '电子邮件不能为空' },
-      { type: 'email', message: '请输入正确的邮箱格式' },
-      { min: 3, message: '邮箱最少为3位数' },
-      { max: 20, message: '邮箱最多为20位数' }
-    ]
-    const passwordRules: RulesProp = [
-      { required: true, message: '请输入密码' },
-      { min: 6, message: '密码最少为6位数' },
-      { max: 20, message: '密码最多为20位数' }
-    ]
-    const submitForm = (result: boolean) => {
-      console.log(result)
-    }
     return {
       list: testData,
       currentUser,
-      emailRules,
       emailVal,
-      submitForm,
-      passwordVal,
-      passwordRules
+      passwordVal
     }
   }
 })
