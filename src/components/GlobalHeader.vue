@@ -1,34 +1,41 @@
 <template>
   <nav class="navbar navbar-dark bg-primary justify-content-between mb-4 px-4">
-    <a class="navbar-brand"
-       href="#">知乎专栏
+    <a
+      class="navbar-brand"
+      href="#">知乎专栏
     </a>
-    <ul v-if="!user.isLogin"
-        class="list-inline mb-0">
+    <ul
+      v-if="!user.isLogin"
+      class="list-inline mb-0">
       <li class="list-inline-item">
-        <a class="btn btn-outline-light my-2"
-           href="#">登陆
+        <a
+          class="btn btn-outline-light my-2"
+          @click.prevent="goToLogin">登陆
         </a>
       </li>
       <li class="list-inline-item">
-        <a class="btn btn-outline-light my-2"
-           href="#">注册
-        </a>
+        <router-link
+          class="btn btn-outline-light my-2"
+          to="/login">注册
+        </router-link>
       </li>
     </ul>
-    <ul v-else
-        class="list-inline mb-0">
+    <ul
+      v-else
+      class="list-inline mb-0">
       <li class="list-inline-item">
         <Dropdown>
           <DropdownItem>
-            <a class="dropdown-item"
-               href="#">
+            <a
+              class="dropdown-item"
+              href="#">
               新建文章
             </a>
           </DropdownItem>
           <DropdownItem disabled>
-            <a class="dropdown-item"
-               href="#">
+            <a
+              class="dropdown-item"
+              href="#">
               编辑资料
             </a>
           </DropdownItem>
@@ -39,9 +46,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, onMounted, onUnmounted } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  onMounted,
+  onUnmounted
+} from 'vue'
 import Dropdown from '@/components/Dropdown.vue'
 import DropdownItem from '@/components/DropdownItem.vue'
+import { useRouter } from 'vue-router'
 
 export interface UserProps {
   isLogin: boolean;
@@ -60,6 +73,15 @@ export default defineComponent({
   components: {
     Dropdown,
     DropdownItem
+  },
+  setup () {
+    const router = useRouter()
+    const goToLogin = () => {
+      router.push('login')
+    }
+    return {
+      goToLogin
+    }
   }
 })
 </script>

@@ -18,6 +18,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'ban-ts-ignore': 'off',
-    'vue/no-unused-components': 1
+    'vue/no-unused-components': 1,
+    '@typescript-eslint/ban-ts-ignore': 'off'
   }
 }

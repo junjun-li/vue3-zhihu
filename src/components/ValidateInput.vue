@@ -72,9 +72,9 @@ export default defineComponent({
           } else if (ruleItem.type === 'email') {
             passed = emailReg.test(inputRef.val)
           } else if (ruleItem.min) {
-            passed = inputRef.val.length > +ruleItem.min
+            passed = inputRef.val.length >= +ruleItem.min
           } else if (ruleItem.max) {
-            passed = inputRef.val.length < +ruleItem.max
+            passed = inputRef.val.length <= +ruleItem.max
           }
           return passed
         })

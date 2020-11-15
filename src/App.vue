@@ -1,35 +1,47 @@
 <template>
   <div class="container">
     <GlobalHeader :user="currentUser"/>
+    <router-view />
     <!--<ColumnList :list="list"/>-->
-    <ValidateForm @submitForm="submitForm">
-      <div class="mb-3">
-        <label class="form-label">邮箱地址
-        </label>
-        <ValidateInput
-          v-model="emailVal"
-          :rules="emailRules"
-          placeholder="请输入邮箱"
-          type="text"></ValidateInput>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">
-          密码
-        </label>
-        <ValidateInput
-          v-model="passwordVal"
-          :rules="passwordRules"
-          placeholder="请输入密码"
-          type="password"
-        />
-      </div>
-      <template #submit>
-        <button
-          class="btn btn-primary"
-          type="submit">Submit
-        </button>
-      </template>
-    </ValidateForm>
+    <!--    <ValidateForm @submitForm="submitForm">-->
+    <!--      <div class="mb-3">-->
+    <!--        <label class="form-label">邮箱地址-->
+    <!--        </label>-->
+    <!--        <ValidateInput-->
+    <!--          v-model="emailVal"-->
+    <!--          :rules="emailRules"-->
+    <!--          placeholder="请输入邮箱"-->
+    <!--          type="text"></ValidateInput>-->
+    <!--      </div>-->
+    <!--      <div class="mb-3">-->
+    <!--        <label class="form-label">-->
+    <!--          密码-->
+    <!--        </label>-->
+    <!--        <ValidateInput-->
+    <!--          v-model="passwordVal"-->
+    <!--          :rules="passwordRules"-->
+    <!--          placeholder="请输入密码"-->
+    <!--          type="password"-->
+    <!--        />-->
+    <!--      </div>-->
+    <!--      <template #submit>-->
+    <!--        <button-->
+    <!--          class="btn btn-primary"-->
+    <!--          type="submit">Submit-->
+    <!--        </button>-->
+    <!--      </template>-->
+    <!--    </ValidateForm>-->
+    <footer class="text-center py-4 text-secondary bg-light mt-6">
+      <small>
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">© 2020 知乎专栏</li>
+          <li class="list-inline-item">课程</li>
+          <li class="list-inline-item">文档</li>
+          <li class="list-inline-item">联系我</li>
+          <li class="list-inline-item">更多</li>
+        </ul>
+      </small>
+    </footer>
   </div>
 </template>
 
@@ -71,7 +83,7 @@ const testData: ColumnProps[] = [
   }
 ]
 const currentUser: UserProps = {
-  isLogin: true,
+  isLogin: false,
   name: 'ljj'
 }
 
