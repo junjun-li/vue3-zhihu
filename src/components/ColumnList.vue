@@ -2,18 +2,18 @@
   <div class="row">
     <div
       v-for="column in columnList"
-      :key="column.id"
+      :key="column._id"
       class="col-4 mb-4">
       <div class="card h-100 shadow-sm">
         <div class="card-body text-center">
           <img
             :alt="column.title"
-            :src="column.avatar"
-            class="rounded-circle border border-light w-25 my-3">
+            :src="column.avatar && column.avatar.url"
+            class="rounded-circle border border-light my-3">
           <h5 class="card-title">{{ column.title }}</h5>
           <p class="card-text text-left">{{ column.description }}</p>
           <router-link
-            :to="`/column/${column.id}`"
+            :to="`/column/${column._id}`"
             class="btn btn-outline-primary">进入专栏
           </router-link>
         </div>
@@ -27,15 +27,23 @@
 import {
   defineComponent,
   PropType,
-  computed
+  computed,
+  onMounted,
+  ref
 } from 'vue'
-
-export interface ColumnProps {
-  id: number;
-  title: string;
-  avatar?: string;
-  description: string;
-}
+import { ColumnProps } from '@/store'
+import { getColumns } from '@/api'
+//
+// interface IColumnList {
+//   author?: string;
+//   // avatar?: {_id: "5f3e41a8b7d9c60b68cdd1ec", url: "http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e41a8b7d9c60b68cdd1ec.jpg"}
+//   createdAt?: string;
+//   description?: string;
+//   featured?: boolean;
+//   key?: number;
+//   title?: string;
+//   _id?: string;
+// }
 
 export default defineComponent({
   name: 'ColumnList',
@@ -46,13 +54,22 @@ export default defineComponent({
     }
   },
   setup (props) {
-    const columnList = computed(() => {
-      return props.list.map(column => {
-        if (!column.avatar) {
-          column.avatar = require('@/assets/column.jpg')
+    const columnList = ref(undefined)
+    const _getColumns = async () => {
+      const res = await getColumns()
+      columnList.value = res.data.list.map((item: any) => {
+        if (!item.avatar) {
+          item.avatar = {
+            url: require('@/assets/column.jpg')
+          }
+        } else {
+          item.avatar.url = item.avatar.url + '?x-oss-process=image/resize,m_pad,h_50,w_50'
         }
-        return column
+        return item
       })
+    }
+    onMounted(() => {
+      _getColumns()
     })
     return {
       columnList
@@ -60,3 +77,9 @@ export default defineComponent({
   }
 })
 </script>
+<style scoped>
+.card-body img {
+  width: 50px;
+  height: 50px;
+}
+</style>

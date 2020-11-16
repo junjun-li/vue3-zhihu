@@ -6,8 +6,8 @@
       <div class="col-3 text-center">
         <img
           :alt="column.title"
-          :src="column.avatar"
-          class="rounded-circle border ">
+          :src="column.avatar.url"
+          class="rounded-circle border w-100">
       </div>
       <div class="col-9">
         <h4>{{ column.title }}</h4>
@@ -19,13 +19,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { useRoute } from 'vue-router'
 import {
-  testData,
-  testPosts
-} from '@/testData'
+  defineComponent,
+  onMounted,
+  ref
+} from 'vue'
+import { useRoute } from 'vue-router'
+// import { useStore } from 'vuex'
+// import { GlobalDataProps } from '@/store'
 import PostList from '@/components/PostList.vue'
+import {
+  getColumnsById,
+  getPostsById
+} from '@/api'
 
 export default defineComponent({
   components: {
@@ -33,11 +39,22 @@ export default defineComponent({
   },
   setup () {
     const route = useRoute()
-    console.log(route)
-    console.log(route.params)
-    const currentId = +route.params.id
-    const column = testData.find(c => c.id === currentId)
-    const list = testPosts.filter(post => post.columnId === currentId)
+    const currentId = route.params.id as string
+    const column = ref(undefined)
+    const list = ref(undefined)
+    const _getColumns = async () => {
+      const res = await getColumnsById(currentId)
+      column.value = res.data
+    }
+    const _getPostsById = async () => {
+      const res = await getPostsById(currentId)
+      list.value = res.data.list
+      console.log(list.value)
+    }
+    onMounted(() => {
+      _getColumns()
+      _getPostsById()
+    })
     return {
       column,
       list

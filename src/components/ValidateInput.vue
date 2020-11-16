@@ -1,12 +1,23 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input
+    <textarea
+      v-if="tag === 'textarea'"
       v-bind="$attrs"
       :class="{'is-invalid': inputRef.error}"
       :value="inputRef.val"
       class="form-control"
       @blur="validateInput"
-      @input="updateValue">
+      @input="updateValue"
+    />
+    <input
+      v-else
+      v-bind="$attrs"
+      :class="{'is-invalid': inputRef.error}"
+      :value="inputRef.val"
+      class="form-control"
+      @blur="validateInput"
+      @input="updateValue"
+    />
     <span
       v-if="inputRef.error"
       v-bind="$attrs"
@@ -40,6 +51,7 @@ interface InputRef {
 }
 
 export type RulesProp = RuleProp[]
+export type TagType = 'input' | 'textarea'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -48,7 +60,11 @@ export default defineComponent({
     // 规定父组件传递过来的规则
     rules: Array as PropType<RulesProp>,
     // 1. 让组件支持v-model
-    modelValue: String
+    modelValue: String,
+    tag: {
+      type: String as PropType<TagType>,
+      default: 'input'
+    }
   },
   setup (props, context) {
     const inputRef: InputRef = reactive({

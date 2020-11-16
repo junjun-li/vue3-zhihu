@@ -5,7 +5,7 @@
       href="#">知乎专栏
     </a>
     <ul
-      v-if="!isLogin"
+      v-if="false"
       class="list-inline mb-0">
       <li class="list-inline-item">
         <a
@@ -27,11 +27,11 @@
         <Dropdown title="你好, 111junjun">
           <template #dropdown>
             <DropdownItem>
-              <a
+              <router-link
                 class="dropdown-item"
-                href="#">
+                to="/create">
                 新建文章
-              </a>
+              </router-link>
             </DropdownItem>
             <DropdownItem disabled>
               <a
@@ -60,6 +60,7 @@ import DropdownItem from '@/components/DropdownItem.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
+import { getColumns } from '@/api'
 
 export interface UserProps {
   isLogin: boolean;
@@ -86,12 +87,17 @@ export default defineComponent({
       router.push('login')
     }
     const user = computed(() => store.getters.user)
-    const isLogin = computed(() => store.getters.isLogin)
-    console.log(isLogin.value)
+    // debugger
+    // const isLogin = computed(() => store.getters.isLogin)
+    onMounted(() => {
+      getColumns().then(res => {
+        console.log(res)
+      })
+    })
     return {
       goToLogin,
-      user,
-      isLogin
+      user
+      // isLogin
     }
   }
 })

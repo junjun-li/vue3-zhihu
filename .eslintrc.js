@@ -17,7 +17,10 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    //关闭 ts 禁止使用忽略语法
     'ban-ts-ignore': 'off',
+    // 关闭模板字符串 `${  }` 两遍禁止使用空格
+    'template-curly-spacing': 'off',
     'vue/no-unused-components': 1,
     '@typescript-eslint/ban-ts-ignore': 'off'
   }
