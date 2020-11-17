@@ -42,55 +42,27 @@ export interface GlobalDataProps {
   columns: ColumnProps[];
   posts: PostProps[];
   user: UserProps;
+  loading: boolean;
 }
 
 const store = createStore<GlobalDataProps>({
   state: {
     columns: [],
     posts: [],
-    user: { isLogin: true, name: 'viking', columnId: 1 }
+    user: { isLogin: false, name: 'viking', columnId: 1 },
+    loading: false
   },
   mutations: {
     login (state) {
       state.user = { ...state.user, isLogin: true, name: 'viking' }
     },
-    createPost (state, newPost) {
-      state.posts.push(newPost)
-    },
-    fetchColumns (state, rawData) {
-      state.columns = rawData.data.list
-    },
-    fetchColumn (state, rawData) {
-      state.columns = [rawData.data]
-    },
-    fetchPosts (state, rawData) {
-      state.posts = rawData.data.list
+    setLoading(state, loadingState) {
+      state.loading = loadingState
     }
   },
   actions: {
-    fetchColumns ({ commit }) {
-      getColumns().then(res => {
-        commit('fetchColumns', res)
-      })
-    },
-    fetchColumn ({ commit }, cid) {
-      // getColumns(cid).then(res => {
-      //   commit('fetchColumn', res)
-      // })
-    },
-    fetchPosts ({ commit }, cid) {
-      getPostsById(cid).then(res => {
-        commit('fetchPosts', res)
-      })
-    }
   },
   getters: {
-    getColumnById: (state) => (id: string) => {
-      return state.columns.find(c => c._id === id)
-    },
-    getPostsByCid: (state) => (cid: string) => {
-      return state.posts.filter(post => post.column === cid)
-    }
   }
 })
 

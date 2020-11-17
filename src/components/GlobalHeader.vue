@@ -5,7 +5,7 @@
       href="#">知乎专栏
     </a>
     <ul
-      v-if="false"
+      v-if="!user.isLogin"
       class="list-inline mb-0">
       <li class="list-inline-item">
         <a
@@ -50,9 +50,6 @@
 <script lang="ts">
 import {
   defineComponent,
-  PropType,
-  onMounted,
-  onUnmounted,
   computed
 } from 'vue'
 import Dropdown from '@/components/Dropdown.vue'
@@ -60,7 +57,6 @@ import DropdownItem from '@/components/DropdownItem.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
-import { getColumns } from '@/api'
 
 export interface UserProps {
   isLogin: boolean;
@@ -86,18 +82,10 @@ export default defineComponent({
     const goToLogin = () => {
       router.push('login')
     }
-    const user = computed(() => store.getters.user)
-    // debugger
-    // const isLogin = computed(() => store.getters.isLogin)
-    onMounted(() => {
-      getColumns().then(res => {
-        console.log(res)
-      })
-    })
+    const user = computed(() => store.state.user)
     return {
       goToLogin,
       user
-      // isLogin
     }
   }
 })

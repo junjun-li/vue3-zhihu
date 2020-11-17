@@ -38,6 +38,15 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
 import ValidateForm from '@/components/ValidateForm.vue'
+import { login } from '@/api'
+
+interface ResProps {
+  code: number;
+  data: {
+    token: string;
+  };
+  msg: string;
+}
 
 export default defineComponent({
   name: 'Login',
@@ -46,8 +55,8 @@ export default defineComponent({
     ValidateForm
   },
   setup () {
-    const emailVal = ref<undefined | string>('11776174@qq.com')
-    const passwordVal = ref<undefined | string>('123456')
+    const emailVal = ref<string>('11776174@qq.com')
+    const passwordVal = ref<string>('123456')
     const router = useRouter()
     const store = useStore()
     const emailRules: RulesProp = [
@@ -61,12 +70,17 @@ export default defineComponent({
       { min: 6, message: '密码最少为6位数' },
       { max: 20, message: '密码最多为20位数' }
     ]
-    const submitForm = (result: boolean) => {
+    const submitForm = async (result: boolean) => {
       if (result) {
-        router.push('/')
-        store.commit('setUser', {
-          isLogin: true
+        const res: any = await login({
+          email: emailVal.value,
+          password: passwordVal.value
         })
+        if (res.code === 0) {
+          await router.push('/')
+        } else {
+          console.log(1)
+        }
       }
     }
     return {

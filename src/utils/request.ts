@@ -1,12 +1,12 @@
 import axios from 'axios'
-
+import store from '@/store'
 const instance = axios.create({
-  // curl -X GET "/columns?currentPage=1&pageSize=5
   baseURL: 'http://apis.imooc.com/api/'
 })
 
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
+  store.commit('setLoading', true)
   // 在发送请求之前做些什么
   config.params = {
     ...config.params,
@@ -29,9 +29,11 @@ instance.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
+  store.commit('setLoading', false)
   // 对响应数据做点什么
   return response.data
 }, function (error) {
+  store.commit('setLoading', false)
   // 对响应错误做点什么
   return Promise.reject(error)
 })

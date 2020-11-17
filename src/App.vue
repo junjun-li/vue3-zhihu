@@ -13,6 +13,7 @@
         </ul>
       </small>
     </footer>
+    <Loading v-if="isLoading" text="加载中..." />
   </div>
 </template>
 
@@ -23,18 +24,22 @@ import {
 } from 'vue'
 import { useStore } from 'vuex'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import GlobalHeader from './components/GlobalHeader.vue'
+import GlobalHeader from '@/components/GlobalHeader.vue'
+import Loading from '@/components/Loading.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    GlobalHeader
+    GlobalHeader,
+    Loading
   },
   setup () {
     const store = useStore()
     const currentUser = computed(() => store.state.user)
+    const isLoading = computed(() => store.state.loading)
     return {
-      currentUser
+      currentUser,
+      isLoading
     }
   }
 })
