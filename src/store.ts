@@ -10,9 +10,10 @@ import {
 
 interface UserProps {
   isLogin: boolean;
-  name?: string;
-  id?: number;
-  columnId?: number;
+  nickName?: string;
+  _id?: string;
+  column?: string;
+  email?: string;
 }
 
 interface ImageProps {
@@ -49,21 +50,25 @@ const store = createStore<GlobalDataProps>({
   state: {
     columns: [],
     posts: [],
-    user: { isLogin: false, name: 'viking', columnId: 1 },
+    user: {
+      isLogin: false,
+      column: '',
+      email: '',
+      nickName: '',
+      _id: ''
+    },
     loading: false
   },
   mutations: {
-    login (state) {
-      state.user = { ...state.user, isLogin: true, name: 'viking' }
+    setUser (state, userInfo) {
+      state.user = userInfo
     },
-    setLoading(state, loadingState) {
+    setLoading (state, loadingState) {
       state.loading = loadingState
     }
   },
-  actions: {
-  },
-  getters: {
-  }
+  actions: {},
+  getters: {}
 })
 
 export default store

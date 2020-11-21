@@ -38,7 +38,11 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
 import ValidateForm from '@/components/ValidateForm.vue'
-import { login } from '@/api'
+import {
+  getUserInfo,
+  login
+} from '@/api'
+import createMessage from '@/components/createMessage'
 
 interface ResProps {
   code: number;
@@ -72,15 +76,22 @@ export default defineComponent({
     ]
     const submitForm = async (result: boolean) => {
       if (result) {
-        const res: any = await login({
+        login({
           email: emailVal.value,
           password: passwordVal.value
+        }).then(async (res: any) => {
+          if (res.code === 0) {
+            debugger
+            localStorage.setItem('token', res.data.token)
+            createMessage('登录成功', 'success')
+            await router.push('/')
+          }
+        }).catch(e => {
+          createMessage('用户名或密码错误', 'error')
         })
-        if (res.code === 0) {
-          await router.push('/')
-        } else {
-          console.log(1)
-        }
+        // else {
+        //   createMessage(res.error, 'error')
+        // }
       }
     }
     return {

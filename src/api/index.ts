@@ -26,3 +26,8 @@ export const login = (data: any) => axios({
     password: data.password
   }
 })
+
+export const getUserInfo = () => axios({
+  url: '/user/current',
+  method: 'GET'
+})

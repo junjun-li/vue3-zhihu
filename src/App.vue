@@ -13,11 +13,14 @@
         </ul>
       </small>
     </footer>
-    <Loading v-if="isLoading" text="加载中..." />
+    <Loading
+      v-if="isLoading"
+      text="加载中..."/>
   </div>
 </template>
 
 <script lang="ts">
+import { message } from 'ant-design-vue'
 import {
   defineComponent,
   computed
@@ -37,9 +40,27 @@ export default defineComponent({
     const store = useStore()
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
+    // watch(isLoading, (newVal, oldVal) => {
+    //   console.log(newVal)
+    //   console.log(oldVal)
+    // })
+    // const btnClick = () => {
+    //   debugger
+    //   message.info('This is a normal message')
+    // }
+    const closeMessage = (params: any) => {
+      console.log(params)
+    }
     return {
       currentUser,
-      isLoading
+      isLoading,
+      closeMessage
+      // btnClick
+    }
+  },
+  methods: {
+    btnClick () {
+      message.info('This is a normal message')
     }
   }
 })

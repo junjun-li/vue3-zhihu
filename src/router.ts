@@ -7,6 +7,7 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import ColumnDetail from '@/views/ColumnDetail.vue'
 import CreatePost from '@/views/CreatePost.vue'
+import { getUserInfo } from '@/api'
 
 const routerHistory = createWebHistory()
 
@@ -38,6 +39,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
   // 没登录, 取登录页
   if (to.meta.requiredLogin && !store.state.user.isLogin) {
     next('/login')
@@ -46,6 +48,23 @@ router.beforeEach((to, from, next) => {
     next('/')
   } else {
     next()
+    if (token) {
+      getUserInfo().then(res => {
+        store.commit('setUser', {
+          ...res.data,
+          isLogin: true
+        })
+        next()
+      }).catch(err => {
+        next('/login')
+        // store.commit('setUser', {
+        //   isLogin: false
+        // })
+        console.log(err)
+      })
+    } else {
+      next('/login')
+    }
   }
 })
 
