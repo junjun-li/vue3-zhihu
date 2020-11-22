@@ -31,3 +31,12 @@ export const getUserInfo = () => axios({
   url: '/user/current',
   method: 'GET'
 })
+
+export const uploadFile = (data: FormData) => axios({
+  url: '/upload',
+  method: 'POST',
+  headers: {
+    'Content-type': 'multipart/form-data'
+  },
+  data
+})

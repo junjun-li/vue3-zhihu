@@ -8,6 +8,12 @@ import {
   getPostsById
 } from '@/api'
 
+export interface ResponseType<T = {}> {
+  code: number;
+  message: string;
+  data: T;
+}
+
 interface UserProps {
   isLogin: boolean;
   nickName?: string;

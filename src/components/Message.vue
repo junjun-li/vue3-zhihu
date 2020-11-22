@@ -7,7 +7,13 @@
   <teleport to="#message">
     <div
       v-if="isVisible"
-      class="alert-primary alert message-info fixed center mx-auto d-flex justify-content-between mt-2">
+      class="alert message-info fixed center mx-auto d-flex justify-content-between mt-2"
+      :class="{
+        'alert-primary': type === 'default',
+        'alert-danger': type === 'error',
+        'alert-success': type === 'success',
+      }"
+    >
       <span>{{ message }}</span>
       <button
         aria-label="Close"

@@ -81,7 +81,6 @@ export default defineComponent({
           password: passwordVal.value
         }).then(async (res: any) => {
           if (res.code === 0) {
-            debugger
             localStorage.setItem('token', res.data.token)
             createMessage('登录成功', 'success')
             await router.push('/')

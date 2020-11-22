@@ -21,6 +21,7 @@ instance.interceptors.request.use(async function (config) {
   }
   // 其他请求，添加到 body 中
   // 如果是上传文件，添加到 FormData 中
+  // debugger
   if (config.data instanceof FormData) {
     config.data.append('icode', 'C2DE5B1DAC48EF5B')
   } else {
