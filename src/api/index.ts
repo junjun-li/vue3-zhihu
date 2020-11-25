@@ -1,10 +1,11 @@
 import axios from '@/utils/request'
+import { PostProps } from '@/store'
 
 export const getColumns = () => axios({
   url: '/columns',
   params: {
     currentPage: 1,
-    pageSize: 5
+    pageSize: 20
   }
 })
 
@@ -30,6 +31,12 @@ export const login = (data: any) => axios({
 export const getUserInfo = () => axios({
   url: '/user/current',
   method: 'GET'
+})
+
+export const posts = (data: PostProps) => axios({
+  url: '/posts',
+  method: 'POST',
+  data
 })
 
 export const uploadFile = (data: FormData) => axios({

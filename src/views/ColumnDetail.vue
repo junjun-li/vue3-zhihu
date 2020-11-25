@@ -5,8 +5,13 @@
       class="column-info row mb-4 border-bottom pb-4 align-items-center">
       <div class="col-3 text-center">
         <img
+          v-if="column.avatar"
           :alt="column.title"
-          :src="column.avatar.url"
+          :src="column.avatar && column.avatar.url"
+          class="rounded-circle border w-100">
+        <img
+          v-else
+          src="@/assets/logo.png"
           class="rounded-circle border w-100">
       </div>
       <div class="col-9">
@@ -25,8 +30,6 @@ import {
   ref
 } from 'vue'
 import { useRoute } from 'vue-router'
-// import { useStore } from 'vuex'
-// import { GlobalDataProps } from '@/store'
 import PostList from '@/components/PostList.vue'
 import {
   getColumnsById,

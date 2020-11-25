@@ -1,15 +1,5 @@
 <template>
   <div class="container">
-    <Uploader
-      :before-upload="beforeUpload"
-      @on-success="onSuccess"
-      @on-error="onError"
-    >
-<!--      <h1>点击上传</h1>-->
-      <template #uploaded="dataProps">
-        <img :src="dataProps.uploadedData.url" width="500">
-      </template>
-    </Uploader>
     <global-header :user="currentUser"></global-header>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
@@ -66,37 +56,11 @@ export default defineComponent({
       console.log(params)
     }
     //
-    const beforeUpload = (file: File) => {
-      const isLt1M = file.size / 1024 / 1024 < 1
-      const isJPG = file.type === 'image/jpeg'
-      if (!isLt1M) {
-        createMessage('图片必须小于1M', 'error')
-      }
-      if (!isJPG) {
-        createMessage('图片必须是jpeg格式', 'error')
-      }
-      return isLt1M && isJPG
-    }
-    const onSuccess = (res: ResponseType<{
-      createdAt: string;
-      extname: string;
-      filename: string;
-      url: string;
-      _id: string;
-    }>) => {
-      console.log(res)
-    }
-    const onError = (res: ResponseType) => {
-      console.log(res)
-    }
+
     return {
       currentUser,
       isLoading,
-      closeMessage,
-      beforeUpload,
-      onSuccess,
-      onError
-      // btnClick
+      closeMessage
     }
   },
   methods: {

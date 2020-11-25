@@ -1,6 +1,7 @@
 <template>
   <div class="file-upload">
     <div
+      v-bind="$attrs"
       class="file-upload-container"
       @click.prevent="triggerUpload">
       <slot
@@ -15,8 +16,8 @@
       </slot>
       <slot
         v-else-if="fileStatus === 'success'"
-        name="uploaded"
-        :uploadedData="uploadedData">
+        :uploadedData="uploadedData"
+        name="uploaded">
         上传成功
       </slot>
       <slot v-else>
@@ -48,6 +49,7 @@ type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
 type beforeUpload = (file: File) => boolean
 
 export default defineComponent({
+  inheritAttrs: false,
   name: 'Uploader',
   props: {
     beforeUpload: {
@@ -81,7 +83,6 @@ export default defineComponent({
         uploadFile(formData).then(res => {
           fileStatus.value = 'success'
           context.emit('on-success', res)
-          debugger
           uploadedData.value = res.data
         }).catch((err) => {
           context.emit('on-error', err)
