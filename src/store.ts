@@ -75,7 +75,9 @@ const store = createStore<GlobalDataProps>({
     }
   },
   actions: {},
-  getters: {}
+  getters: {
+    getCurrentPost: (state) => (id: string) => state.posts.find(post => post._id === id)
+  }
 })
 
 export default store

@@ -22,6 +22,7 @@ module.exports = {
     // 关闭模板字符串 `${  }` 两遍禁止使用空格
     'template-curly-spacing': 'off',
     'vue/no-unused-components': 1,
-    '@typescript-eslint/ban-ts-ignore': 'off'
+    '@typescript-eslint/ban-ts-ignore': 'off',
+    'vue/no-deprecated-slot-scope-attribute': 'off'
   }
 }

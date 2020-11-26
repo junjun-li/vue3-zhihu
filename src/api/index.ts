@@ -47,3 +47,8 @@ export const uploadFile = (data: FormData) => axios({
   },
   data
 })
+
+export const getPostById = (id: string) => axios({
+  url: `/posts/${id}`,
+  method: 'GET'
+})

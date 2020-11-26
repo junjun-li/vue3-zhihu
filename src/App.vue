@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <h2>{{ searchText }}</h2>
+    <demo v-model="searchText" />
     <global-header :user="currentUser"></global-header>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
@@ -23,7 +25,8 @@
 import { message } from 'ant-design-vue'
 import {
   defineComponent,
-  computed
+  computed,
+  ref
 } from 'vue'
 import { useStore } from 'vuex'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -32,10 +35,12 @@ import Loading from '@/components/Loading.vue'
 import Uploader from '@/components/Uploader.vue'
 import createMessage from '@/components/createMessage'
 import { ResponseType } from '@/store'
+import Demo from '@/views/demo.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
+    Demo,
     GlobalHeader,
     Loading,
     Uploader
@@ -56,11 +61,12 @@ export default defineComponent({
       console.log(params)
     }
     //
-
+    const searchText = ref('000')
     return {
       currentUser,
       isLoading,
-      closeMessage
+      closeMessage,
+      searchText
     }
   },
   methods: {

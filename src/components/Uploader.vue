@@ -16,8 +16,8 @@
       </slot>
       <slot
         v-else-if="fileStatus === 'success'"
-        :uploadedData="uploadedData"
-        name="uploaded">
+        name="uploaded"
+        :uploadedData="uploadedData">
         上传成功
       </slot>
       <slot v-else>
@@ -41,7 +41,8 @@
 import {
   defineComponent,
   ref,
-  PropType
+  PropType,
+  watch
 } from 'vue'
 import { uploadFile } from '@/api'
 
@@ -54,13 +55,22 @@ export default defineComponent({
   props: {
     beforeUpload: {
       type: Function as PropType<beforeUpload>
+    },
+    uploaded: {
+      type: Object
     }
   },
   emits: ['on-success', 'on-error'],
   setup (props, context) {
     const fileInput = ref<null | HTMLInputElement>(null)
-    const fileStatus = ref<UploadStatus>('ready')
-    const uploadedData = ref()
+    const fileStatus = ref<UploadStatus>(props.uploaded ? 'success' : 'ready')
+    const uploadedData = ref(props.uploaded)
+    watch(() => props.uploaded, (newValue) => {
+      if (newValue) {
+        fileStatus.value = 'success'
+        uploadedData.value = newValue
+      }
+    })
     const triggerUpload = () => {
       if (fileInput.value) {
         fileInput.value.click()
@@ -83,7 +93,7 @@ export default defineComponent({
         uploadFile(formData).then(res => {
           fileStatus.value = 'success'
           context.emit('on-success', res)
-          uploadedData.value = res.data
+          uploadedData.value = res
         }).catch((err) => {
           context.emit('on-error', err)
           fileStatus.value = 'error'
